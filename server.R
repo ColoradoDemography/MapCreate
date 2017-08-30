@@ -1,30 +1,80 @@
 library(plotly)
 
-source("acsmap.R")
+source("mapsetup.R")
 
 
 
 function(input, output, session) {
   
-acsvar <- "B00001_001E"
-maptitle <- ""
-legendtitle <- ""
+# acsvar <- "B00001_001E"
+# maptitle <- ""
+# legendtitle <- ""
   
-#Match ACS Table Full Name to Table Code
-acsgo <- eventReactive(input$go,{
+filedata <- reactive({
+  infile <- input$datafile
+  if (is.null(infile)) {
+    # User has not uploaded a file yet
+    return(NULL)
+  }
+  read.csv(infile$datapath)
+})
   
-  acsvar=input$acsVar})
-    #as.character()})
+output$contents <- renderTable({
+
+  inFile <- input$datafile
   
-mapgo <- eventReactive(input$go,{  
-  maptitle=input$mapTitle})#%>%
-    #as.character()
+  if (is.null(inFile))
+    return(NULL)
   
-leggo <- eventReactive(input$go,{  
-  legendtitle=input$legendTitle})#%>%
-    #as.character()
+  read.csv(inFile$datapath, header = input$header)
+})
+
+output$fipsCol <- renderUI({
+  df <-filedata()
+  if (is.null(df)) return(NULL)
+  
+  items=names(df)
+  names(items)=items
+  selectInput("fips", "FIPS:",items)
+  
+})
+
+output$valCol <- renderUI({
+  df <-filedata()
+  if (is.null(df)) return(NULL)
+  
+  items=names(df)
+  names(items)=items
+  selectInput("value", "Value:",items)
+  
+})
+
+#Get the variables for the map plot
+
+customgo <- eventReactive(input$cgo,{
+customvar <- input$valCol})
+
+mergego <- eventReactive(input$cgo,{
+  mergevar <- input$fipsCol})
+
+mapgo <- eventReactive(input$cgo,{  
+  maptitle=input$mapTitle})
+
+leggo <- eventReactive(input$cgo,{  
+  legendtitle=input$legendTitle})
+
+sourcego <- eventReactive(input$cgo,{  
+  creditsource=input$creditSource})
   
 
-output$countyMap=renderPlot({counties_map_p(acsvar = acsgo(), maptitle = mapgo(), legendtitle = leggo())})
+output$customMap=renderPlot({custom_map_p(filedata, customvar = customgo(), maptitle = mapgo(), legendtitle = leggo(), creditsource = sourcego())})
   
+output$downloadButton <- downloadHandler(
+  filename = "Shinyplot.png",
+  content = function(file) {
+    png(file)
+    renderPlot({custom_map_p(filedata, mergevar = mergego(), customvar = customgo(), maptitle = mapgo(), legendtitle = leggo(), creditsource = sourcego())})
+    dev.off()
+  })    
+
 }

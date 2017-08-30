@@ -1,9 +1,11 @@
-#source("config.R")
+library(rgdal)
+library(raster)
 library(tidycensus)
 library(tidyverse)
 library(tmap)
 library(tmaptools)
 library(stringr)
+
 options(tigris_use_cache = TRUE)
 
 #Load the tables and filter out the ones we don't want
@@ -38,7 +40,7 @@ tm_shape(co_geo) +
   tm_credits("US Census Bureau 2011-2015 ACS", position = c(.73, 0))
 }  
 
-custom_map_p=function(customvar,maptitle,legendtitle,creditsource){
+custom_map_p=function(filedata,customvar,mergevar,maptitle,legendtitle,creditsource){
   
   #Load Data
   co_geo <- get_acs(
@@ -49,6 +51,8 @@ custom_map_p=function(customvar,maptitle,legendtitle,creditsource){
     state = "CO",
     geometry = TRUE
   )
+  
+  df <- merge(x=co_geo,y=filedata,by=c("NAME",mergevar),all=FALSE)
   
   #Shorten county name
   co_geo$NAME = str_replace(
