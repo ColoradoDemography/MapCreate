@@ -16,7 +16,7 @@ filedata <- reactive({
     # User has not uploaded a file yet
     return(NULL)
   }
-  read.csv(infile$datapath)
+  read.csv(infile$datapath, stringsAsFactors = FALSE)
 })
   
 output$contents <- renderTable({
@@ -67,7 +67,7 @@ sourcego <- eventReactive(input$cgo,{
   creditsource=input$creditSource})
   
 
-output$customMap=renderPlot({custom_map_p(filedata, customvar = customgo(), maptitle = mapgo(), legendtitle = leggo(), creditsource = sourcego())})
+output$customMap=renderPlot({custom_map_p(inFile, mergevar = mergego(), customvar = customgo(), maptitle = mapgo(), legendtitle = leggo(), creditsource = sourcego())})
   
 output$downloadButton <- downloadHandler(
   filename = "Shinyplot.png",

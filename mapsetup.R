@@ -52,7 +52,8 @@ custom_map_p=function(filedata,customvar,mergevar,maptitle,legendtitle,creditsou
     geometry = TRUE
   )
   
-  df <- merge(x=co_geo,y=filedata,by=c("NAME",mergevar),all=FALSE)
+  co_geo <- merge(x=co_geo,y=filedata,by.x="NAME",by.y=mergevar,all=FALSE)
+  co_geo[[customvar]] <- as.numeric(co_geo[[customvar]])
   
   #Shorten county name
   co_geo$NAME = str_replace(
@@ -61,11 +62,11 @@ custom_map_p=function(filedata,customvar,mergevar,maptitle,legendtitle,creditsou
   
   #Basic map
   tm_shape(co_geo) +
-    tm_polygons(customvar, title=legendtitle) +
+    tm_polygons(customvar, title="legendtitle") +
     tm_text("NAME", size=.5) +
-    tm_layout(title = maptitle, title.position = c("center","top"), inner.margins = c(.05,.2,.1,.02)) +
+    tm_layout(title = "maptitle", title.position = c("center","top"), inner.margins = c(.05,.25,.1,.02)) +
     tm_legend(position = c("left","center")) +
     tm_style_col_blind() +
     tm_compass(position = c(.07, .15), color.light = "grey90") +
-    tm_credits(creditsource, position = c(.73, 0))
+    tm_credits("creditsource", position = c(.73, 0))
 }  
