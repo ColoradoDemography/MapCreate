@@ -20,8 +20,8 @@ shinyUI(navbarPage("Map Create",
                   textInput("mapTitle","Add a Map Title", ""),
                   textInput("legendTitle","Add a Legend Title", ""),
                   textInput("creditSource", "Add a data source", ""),
-                  plotOutput("countyMap"),
-                  downloadButton('countyMapPNG', 'Download PNG')),
+                  plotOutput("customMap"),
+                  downloadButton('customMapPNG', 'Download PNG')),
           
           
           tabPanel("Table",

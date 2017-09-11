@@ -21,12 +21,12 @@ filedata <- reactive({
   
 output$contents <- renderTable({
 
-  inFile <- input$datafile
+  infile <- input$datafile
   
-  if (is.null(inFile))
+  if (is.null(infile))
     return(NULL)
   
-  read.csv(inFile$datapath, header = input$header)
+  read.csv(infile$datapath, header = input$header)
 })
 
 output$fipsCol <- renderUI({
@@ -67,7 +67,7 @@ sourcego <- eventReactive(input$cgo,{
   creditsource=input$creditSource})
   
 
-output$customMap=renderPlot({custom_map_p(inFile, mergevar = mergego(), customvar = customgo(), maptitle = mapgo(), legendtitle = leggo(), creditsource = sourcego())})
+#output$customMap=renderPlot({custom_map_p(filedata = filedata(), mergevar = mergego(), customvar = customgo(), maptitle = mapgo(), legendtitle = leggo(), creditsource = sourcego())})
   
 output$downloadButton <- downloadHandler(
   filename = "Shinyplot.png",

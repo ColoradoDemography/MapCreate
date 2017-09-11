@@ -52,13 +52,16 @@ custom_map_p=function(filedata,customvar,mergevar,maptitle,legendtitle,creditsou
     geometry = TRUE
   )
   
-  co_geo <- merge(x=co_geo,y=filedata,by.x="NAME",by.y=mergevar,all=FALSE)
+  co_geo <- merge(x=co_geo,y=filedata,by.x="NAME",by.y=mergevar)
   co_geo[[customvar]] <- as.numeric(co_geo[[customvar]])
   
   #Shorten county name
   co_geo$NAME = str_replace(
     co_geo$NAME, " County, Colorado", ""
   )
+  
+  #Add Geonum column
+  co_geo$geonum = paste0("1",co_geo$GEOID)
   
   #Basic map
   tm_shape(co_geo) +
