@@ -1,14 +1,10 @@
+library(plotly)
+library(shiny)
+
 source("mapsetup.R")
 
-
-
-#acs_choices=load_variables(2015, "acs5", cache=TRUE) %>%
-# filter(endsWith(acs_choices$name,"E") & nchar(acs_choices$name)>8)
-
-shinyUI(navbarPage("Map Create",
-          tabPanel("Custom Map",
-                  actionButton("cgo", "Plot Map"),
-                  
+shinyUI(pageWithSidebar(headerPanel("Create A Map"),
+          sidebarPanel("",
                   fileInput("datafile", 'Choose CSV file',
                             accept=c('text/csv', 'text/comma-separated-values,text/plain')),
                     tags$hr(),
@@ -20,35 +16,44 @@ shinyUI(navbarPage("Map Create",
                   textInput("mapTitle","Add a Map Title", ""),
                   textInput("legendTitle","Add a Legend Title", ""),
                   textInput("creditSource", "Add a data source", ""),
-                  plotOutput("customMap"),
-                  downloadButton('customMapPNG', 'Download PNG')),
-          
-          
-          tabPanel("Table",
-                   tableOutput("contents")),
-                   
-          tabPanel("ACS Map")#,
-                  # actionButton("go", "Plot Map"),
-                  # selectInput("acsVar","Select a Table:", choices = unique(acs_choices$name), selected = 'B00001_001E'),
-                  # textInput("mapTitle","Add a Map Title", ""),
-                  # textInput("legendTitle","Add a Legend Title", ""),
-                  # plotOutput("countyMap"),
-                  # downloadButton('countyMapPNG', 'Download PNG'))
-           
-           
+
+                  actionButton("cgo", "Plot Map"),
+
+                  radioButtons(inputId = "radButton", label = "Select the file type", choices = list("png","pdf"))),
+
+
+          mainPanel(
+            plotOutput("customMap"),
+            downloadButton(outputId = "customMapPNG", "Download Map")
+            
+          )
+))
+
            # function(req) {
            #   htmlTemplate("index.html",
-           #                county=selectInput("acsVar","Select a county:", choices = unique(acs_choices$label), selected = 'B01002_001E'),
-           #                mapTitle=textInput("mapTitle","Map Title"),
-           #                legendTitle=textInput("legendTitle","Legend Title"),
-           #                counties_map_p=plotlyOutput("countyMap"),
-           #                counties_map_d=downloadButton('countyMapPNG', 'Download PNG')
+           #                userfile=fileInput("datafile", 'Choose CSV file',
+           #                                   accept=c('text/csv', 'text/comma-separated-values,text/plain')),
+           #                        tags$hr(),
+           #                        checkboxInput("header", "Header", TRUE),
+           #                fipsColumn=uiOutput("fipsCol"),
+           #                valColumn=uiOutput("valCol"),
+           #                mapTitle=textInput("mapTitle","Add a Map Title", ""),
+           #                legendTitle=textInput("legendTitle","Add a Legend Title", ""),
+           #                sourceTitle=textInput("creditSource", "Add a data source", ""),
+           #                buttonGo=actionButton("cgo", "Plot Map"),
+           #                customMap=plotOutput("customMap"),
+           #                buttonDL=downloadButton('customMapPNG', 'Download PNG')
+           #                
+           #                # county=selectInput("acsVar","Select a county:", choices = unique(acs_choices$label), selected = 'B01002_001E'),
+           #                # mapTitle=textInput("mapTitle","Map Title"),
+           #                # legendTitle=textInput("legendTitle","Legend Title"),
+           #                # counties_map_p=plotlyOutput("countyMap"),
+           #                # counties_map_d=downloadButton('countyMapPNG', 'Download PNG')
            #   )
-           # },
+           # }
            
            
            
            
            
            
-))

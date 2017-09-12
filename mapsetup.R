@@ -65,11 +65,11 @@ custom_map_p=function(filedata,customvar,mergevar,maptitle,legendtitle,creditsou
   
   #Basic map
   tm_shape(co_geo) +
-    tm_polygons(customvar, title="legendtitle") +
+    tm_polygons(customvar, title=legendtitle) +
     tm_text("NAME", size=.5) +
-    tm_layout(title = "maptitle", title.position = c("center","top"), inner.margins = c(.05,.25,.1,.02)) +
+    tm_layout(title = maptitle, title.position = c("center","top"), inner.margins = c(.05,.18,.1,.02)) +
     tm_legend(position = c("left","center")) +
     tm_style_col_blind() +
     tm_compass(position = c(.07, .15), color.light = "grey90") +
-    tm_credits("creditsource", position = c(.73, 0))
+    tm_credits(creditsource, position = c(.73, 0))
 }  
