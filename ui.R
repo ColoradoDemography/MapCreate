@@ -15,16 +15,24 @@ shinyUI(pageWithSidebar(headerPanel("Create A Map"),
 
                   textInput("mapTitle","Add a Map Title", ""),
                   textInput("legendTitle","Add a Legend Title", ""),
-                  textInput("creditSource", "Add a data source", ""),
+                  textInput("creditSource", "Add a Data Source", ""),
+                  numericInput("numBreaks", "Number of Breaks", 6),
+                  selectInput("breakStyle", "Choose Break Style", c("Natural" = "jenks",
+                                                                    "Quantile" = "quantile")),
+                  selectInput("colorPal", "Select Palette", c("Blue" = "Blues",
+                                                              "Red" = "Reds",
+                                                              "Green" = "Greens",
+                                                              "Red to Green" = "RdYlGn",
+                                                              "Red to Blue" = "RdYlBu")),
 
-                  actionButton("cgo", "Plot Map"),
+                  actionButton("cgo", "Plot Map")),
 
-                  radioButtons(inputId = "radButton", label = "Select the file type", choices = list("png","pdf"))),
+                  #radioButtons(inputId = "radButton", label = "Select the file type", choices = list("png","pdf"))),
 
 
           mainPanel(
-            plotOutput("customMap"),
-            downloadButton(outputId = "customMapPNG", "Download Map")
+            plotOutput("customMap")
+            #downloadButton(outputId = "customMapPNG", "Download Map")
             
           )
 ))

@@ -13,7 +13,7 @@ shinyServer(function(input, output) ({
 # legendtitle <- ""
   
 myPlot <- function(){
-  custom_map_p(filedata = filedata(), mergevar = mergego(), customvar = customgo(), maptitle = mapgo(), legendtitle = leggo(), creditsource = sourcego())
+  custom_map_p(filedata = filedata(), mergevar = mergego(), customvar = customgo(), maptitle = mapgo(), legendtitle = leggo(), creditsource = sourcego(), colorpal = colorgo(), numbreaks = numgo(), breakstyle = breakstylego())
 }
   
 filedata <- reactive({
@@ -41,7 +41,7 @@ output$fipsCol <- renderUI({
   
   items=names(df)
   names(items)=items
-  selectInput("fips", "FIPS:",items)
+  selectInput("fips", "Name Field:",items)
   
 })
 
@@ -51,7 +51,7 @@ output$valCol <- renderUI({
   
   items=names(df)
   names(items)=items
-  selectInput("value", "Value:",items)
+  selectInput("value", "Value Field:",items)
   
 })
 
@@ -71,8 +71,18 @@ leggo <- reactive({
 
 sourcego <- reactive({  
   creditsource=input$creditSource})
-  
 
+colorgo <- reactive({
+  colorpal=input$colorPal})
+
+numgo <- reactive({
+  numbreaks <- input$numBreaks
+})
+
+breakstylego <- reactive({
+  breakstyle <- input$breakStyle
+})
+  
 output$customMap=renderPlot({
   if (input$cgo[[1]] == 0)
     return()
@@ -80,17 +90,16 @@ output$customMap=renderPlot({
     myPlot()
 })
   
-output$customMapPNG <- downloadHandler(
-  filename = 
-    paste("map",input$radButton,sept=".")
-  ,
-  content = function(file){
-    if(input$radButton == "png")
-      png(file)
-    else
-      pdf(file)
-  myPlot()
-  dev.off()
-  })
+# output$customMapPNG <- downloadHandler(
+#   filename = 
+#     paste("map",input$radButton,sept="."),
+#   content = function(file){
+#     if(input$radButton == "png")
+#       png(file)
+#     else
+#       pdf(file)
+#   myPlot()
+#   dev.off()
+#   })
 
 }))
