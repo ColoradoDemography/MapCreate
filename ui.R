@@ -6,7 +6,7 @@ source("mapsetup.R")
 shinyUI(pageWithSidebar(headerPanel("Create A Map"),
           sidebarPanel("",
                   fileInput("datafile", 'Choose CSV file',
-                            accept=c('text/csv', 'text/comma-separated-values,text/plain')),
+                            accept=c('text/csv', 'text/comma-separated-values,text/plain',".csv")),
                     tags$hr(),
                     checkboxInput("header", "Header", TRUE),
 
