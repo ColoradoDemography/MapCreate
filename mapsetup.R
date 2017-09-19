@@ -9,11 +9,11 @@ library(stringr)
 options(tigris_use_cache = TRUE)
 
 # Add key to .Renviron
-Sys.setenv(CENSUS_KEY="70702eabc2d9259f35334d5702000e246ecffd14")
+census_api_key("70702eabc2d9259f35334d5702000e246ecffd14")
 # Reload .Renviron
-readRenviron(".Renviron")
+#readRenviron("~/.Renviron")
 # Check to see that the expected key is output in your R console
-Sys.getenv("CENSUS_KEY")
+#Sys.getenv("CENSUS_KEY")
 
 #Load the tables and filter out the ones we don't want
 acs_choices=load_variables(2015, "acs5", cache=TRUE) #%>%
